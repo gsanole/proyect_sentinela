@@ -1,0 +1,50 @@
+config:
+  target: "http://localhost:5000"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      name: "Warm up"
+    - duration: 120
+      arrivalRate: 10
+      name: "Sustained load"
+    - duration: 60
+      arrivalRate: 20
+      name: "Spike test"
+
+scenarios:
+  - name: "Browse art feed"
+    weight: 40
+    flow:
+      - get:
+          url: "/api/v1/art-pieces?page=1&limit=20"
+          capture:
+            - json: "$.data[0].id"
+              as: "artPieceId"
+      - think: 2
+      - get:
+          url: "/api/v1/art-pieces/{{ artPieceId }}"
+
+  - name: "Search art"
+    weight: 30
+    flow:
+      - get:
+          url: "/api/v1/art-pieces/search?query=art&minPrice=50&maxPrice=500"
+      - think: 3
+
+  - name: "View artist profile"
+    weight: 20
+    flow:
+      - get:
+          url: "/api/v1/artists"
+          capture:
+            - json: "$.data[0].id"
+              as: "artistId"
+      - think: 1
+      - get:
+          url: "/api/v1/artists/{{ artistId }}"
+
+  - name: "Health check"
+    weight: 10
+    flow:
+      - get:
+          url: "/health"

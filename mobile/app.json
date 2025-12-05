@@ -1,0 +1,21 @@
+{
+  "name": "main",
+  "displayName": "Art Hub",
+  "expo": {
+    "name": "Art Hub",
+    "slug": "art-hub",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.arthub.app"
+    },
+    "android": {
+      "package": "com.arthub.app"
+    }
+  }
+}
